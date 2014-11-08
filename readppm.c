@@ -10,6 +10,12 @@ typedef struct {
      PPMPixel *data;
 } PPMImage;
 
+typedef struct {
+    int intercept;
+    double alpha;
+} line;
+
+
 #define CREATOR "RPFELGUEIRAS"
 #define RGB_COMPONENT_COLOR 255
 
@@ -46,11 +52,11 @@ static PPMImage *readPPM(const char *filename)
     }
 
     //check for comments
-    c = getc(fp);
-    while (c == '#') {
-    while (getc(fp) != '\n') ;
-         c = getc(fp);
-    }
+//    c = getc(fp);
+//    while (c == '#') {
+//    while (getc(fp) != '\n') ;
+//         c = getc(fp);
+//    }
 
     ungetc(c, fp);
     //read image size information
@@ -89,6 +95,92 @@ static PPMImage *readPPM(const char *filename)
     fclose(fp);
     return img;
 }
+ threshold(PPMPixel* imgPixel) // Outputs true if the
+{                                  // pixel is above the threshold
+    int green, red, blue;
+    static int greenT=180, redT=20, blueT=20;
+
+    // Convert the hex char value in int
+    green = (int)strtol(imgPixel->green, NULL, 16);
+    blue = (int)strtol(imgPixel->blue, NULL, 16);
+    red = (int)strtol(imgPixel->red, NULL, 16);
+    blue = (int)strtol(imgPixel->blue, NULL, 16);
+    red = (int)strtol(imgPixel->red, NULL, 16);
+    blue = (int)strtol(imgPixel->blue, NULL, 16);
+
+    // Test the pixel with the threshold
+    if(green = imgPixel->green &&
+            red = imgPixel->red && 
+            blue = imgPixel->blue)
+    {
+        if(green>greenT && red<redT && blue<blueT)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        printf("Error: Ureadable pixel colors");
+        exit(2);
+    }
+}
+
+line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
+{                                      // alpha and intercept
+    PPMPixel* imgPixel;
+    line CutLine;
+    int* pixelPosition, xCenterUP, yCenterUP, xCenterDOWN, yCenterDOWN;
+    int xMiddle, i, j, k;
+
+    imgPixel = &(img->data);
+    k=0;
+
+    for(i=0;i<img->x;i++)
+    {
+        for(j=0;j<img->y;j++)
+        {
+            if(threshold(imgPixel[i][j]))
+            {
+                realloc(pixelPosition,sizeof(int));
+                pixelPosition[1][k] = i;
+                pixelPosition[2][k] = j;
+                k++;
+            }
+        }
+    }
+
+    xMiddle = (int) (img->y)/2.;
+    xCenterUP = 0;
+    yCenterUP = 0;
+    xCenterDOWN = 0;
+    yCenterDOWN = 0;
+
+
+    for(i=0;i<k;i++)
+    {
+        if(pixelPosition[1][i]>xMiddle)
+        {
+            xCenterUP+=pixelPosition[1][i];
+            yCenterUP+=pixelPosition[2][i];
+        }
+        else
+        {
+            xCenterDOWN+=pixelPosition[1][i];
+            yCenterDOWN+=pixelPosition[2][i];
+        }
+    }
+    xCenterUP = (int) xCenterUP/k;
+    yCenterUP = (int) yCenterUP/k;
+    xCenterDOWN = (int) xCenterDOWN/k;
+    yCenterDOWN = (int) yCenterDOWN/k;
+
+    CutLine->alpha = (double) arctan()
+}
+
 void writePPM(const char *filename, PPMImage *img)
 {
     FILE *fp;
