@@ -132,6 +132,8 @@ line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
     int *tempX, *tempY;
     int xCenterUP, yCenterUP, xCenterDOWN, yCenterDOWN;
     int xMiddle, i, j, k, green, red, blue;
+    pixelPositionX = (int *)calloc(1, sizeof(int));
+    pixelPositionY = (int *)calloc(1, sizeof(int));
     
     printf("Qui ci arrivo 1.a\n");
 
@@ -143,27 +145,29 @@ line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
     {
         for(j=0;j<img->y;j++)
         {
-                if(threshold((int)img->data[i+j].green,
-                        (int)img->data[i+j].red,
-                        (int)img->data[i+j].blue))
+					//printf("k: %d\n", k);
+			//printf("red: %d\tgreen: %d\tblue: %d\t coord: %d\t%d\n", img->data[(i+1)*(j+1)].red, img->data[(i+1)*(j+1)].green, img->data[(i+1)*(j+1)].blue, i, j);
+                if(threshold((int)img->data[(i+1)*(j+1)].green,
+                        (int)img->data[(i+1)*(j+1)].red,
+                        (int)img->data[(i+1)*(j+1)].blue))
                 {
                         printf("PorcoDio\n");
-                        tempX = (int*) realloc(pixelPositionX,sizeof(int*));
-                        tempY = (int*) realloc(pixelPositionY,sizeof(int*));
-                        if(!tempX || !tempY)
-                        {
+                        tempX = (int *) realloc(pixelPositionX,(k+1)*sizeof(int));
+                        tempY = (int *) realloc(pixelPositionY,(k+1)*sizeof(int));
+                        //if(!tempX || !tempY)
+                        //{
                                 pixelPositionX = tempX;
                                 pixelPositionY = tempY;
                                 pixelPositionX[k] = i;
                                 pixelPositionY[k] = j;
                                 k++;
                                 printf("k = %d\n",k);
-                        }
-                        else
+                        //}
+                        /*else
                         {
                                 printf("Error: Failed realloc of memory");
                                 exit(3);
-                        }
+                        }*/
                 }
         }
     }
@@ -202,6 +206,9 @@ line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
     CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
     
     return(CutLine);
+    
+    free(pixelPositionX);
+    free(pixelPositionY);
 }
 
 void writePPM(const char *filename, PPMImage *img)
@@ -258,7 +265,11 @@ int main(){
             CutLineOut = identifyPPMcutLine(image);
             printf("Qui ci arrivo 2\n");
             //    printf("Alpha: %lf", CutLineOut.alpha);
-            printf("Intercept (in pixels): %d", CutLineOut.intercept);
+            printf("Intercept (in pixels): %d\n", CutLineOut.intercept);
+            printf("Alpha: %lf\n", CutLineOut.alpha);
             //    printf("Alpha: %lf\nIntercept: %d \n",CutLineOut.alpha,CutLineOut.intercept);
     }
+    
+    
+    free(image->data);
 }
