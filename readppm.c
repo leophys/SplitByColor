@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<math.h>
+#include<stdbool.h>
 
 typedef struct {
      unsigned char red,green,blue;
@@ -52,11 +54,11 @@ static PPMImage *readPPM(const char *filename)
     }
 
     //check for comments
-//    c = getc(fp);
-//    while (c == '#') {
-//    while (getc(fp) != '\n') ;
-//         c = getc(fp);
-//    }
+    c = getc(fp);
+    while (c == '#') {
+    while (getc(fp) != '\n') ;
+         c = getc(fp);
+    }
 
     ungetc(c, fp);
     //read image size information
@@ -95,30 +97,24 @@ static PPMImage *readPPM(const char *filename)
     fclose(fp);
     return img;
 }
- threshold(PPMPixel* imgPixel) // Outputs true if the
-{                                  // pixel is above the threshold
-    int green, red, blue;
+
+bool threshold(int green, int red, int blue) // Outputs true if the
+{                                            // pixel is above the threshold
     static int greenT=180, redT=20, blueT=20;
 
-    // Convert the hex char value in int
-    green = (int)strtol(imgPixel->green, NULL, 16);
-    blue = (int)strtol(imgPixel->blue, NULL, 16);
-    red = (int)strtol(imgPixel->red, NULL, 16);
-    blue = (int)strtol(imgPixel->blue, NULL, 16);
-    red = (int)strtol(imgPixel->red, NULL, 16);
-    blue = (int)strtol(imgPixel->blue, NULL, 16);
-
     // Test the pixel with the threshold
-    if(green = imgPixel->green &&
-            red = imgPixel->red && 
-            blue = imgPixel->blue)
+    if(green >= 0 && green <= 255 &&
+                    red >= 0 && red <= 255 &&
+                    blue >= 0 && blue <= 255)
     {
         if(green>greenT && red<redT && blue<blueT)
         {
+            printf("Vinto\n");
             return 1;
         }
         else
         {
+            //printf("Perso\n");
             return 0;
         }
     }
@@ -131,27 +127,47 @@ static PPMImage *readPPM(const char *filename)
 
 line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
 {                                      // alpha and intercept
-    PPMPixel* imgPixel;
     line CutLine;
-    int* pixelPosition, xCenterUP, yCenterUP, xCenterDOWN, yCenterDOWN;
-    int xMiddle, i, j, k;
+    int *pixelPositionX, *pixelPositionY;
+    int *tempX, *tempY;
+    int xCenterUP, yCenterUP, xCenterDOWN, yCenterDOWN;
+    int xMiddle, i, j, k, green, red, blue;
+    
+    printf("Qui ci arrivo 1.a\n");
 
-    imgPixel = &(img->data);
+    printf("MannagioCristo: %d\n",(int)img->data[385*148].green);
+
     k=0;
 
     for(i=0;i<img->x;i++)
     {
         for(j=0;j<img->y;j++)
         {
-            if(threshold(imgPixel[i][j]))
-            {
-                realloc(pixelPosition,sizeof(int));
-                pixelPosition[1][k] = i;
-                pixelPosition[2][k] = j;
-                k++;
-            }
+                if(threshold((int)img->data[i+j].green,
+                        (int)img->data[i+j].red,
+                        (int)img->data[i+j].blue))
+                {
+                        printf("PorcoDio\n");
+                        tempX = (int*) realloc(pixelPositionX,sizeof(int*));
+                        tempY = (int*) realloc(pixelPositionY,sizeof(int*));
+                        if(!tempX || !tempY)
+                        {
+                                pixelPositionX = tempX;
+                                pixelPositionY = tempY;
+                                pixelPositionX[k] = i;
+                                pixelPositionY[k] = j;
+                                k++;
+                                printf("k = %d\n",k);
+                        }
+                        else
+                        {
+                                printf("Error: Failed realloc of memory");
+                                exit(3);
+                        }
+                }
         }
     }
+
 
     xMiddle = (int) (img->y)/2.;
     xCenterUP = 0;
@@ -160,17 +176,20 @@ line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
     yCenterDOWN = 0;
 
 
+    printf("Qui ci arrivo 1.b\n");
+    printf("k: %d",k);
     for(i=0;i<k;i++)
     {
-        if(pixelPosition[1][i]>xMiddle)
+        printf("Qui ci arrivo: ciclo %d\n",i);
+        if(pixelPositionX[i]>xMiddle)
         {
-            xCenterUP+=pixelPosition[1][i];
-            yCenterUP+=pixelPosition[2][i];
+            xCenterUP+=pixelPositionX[i];
+            yCenterUP+=pixelPositionY[i];
         }
         else
         {
-            xCenterDOWN+=pixelPosition[1][i];
-            yCenterDOWN+=pixelPosition[2][i];
+            xCenterDOWN+=pixelPositionX[i];
+            yCenterDOWN+=pixelPositionY[i];
         }
     }
     xCenterUP = (int) xCenterUP/k;
@@ -178,7 +197,11 @@ line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
     xCenterDOWN = (int) xCenterDOWN/k;
     yCenterDOWN = (int) yCenterDOWN/k;
 
-    CutLine->alpha = (double) arctan()
+
+    CutLine.alpha = (double) atan((double) (yCenterUP - yCenterDOWN)/(xCenterUP - xCenterDOWN));
+    CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
+    
+    return(CutLine);
 }
 
 void writePPM(const char *filename, PPMImage *img)
@@ -224,9 +247,18 @@ void changeColorPPM(PPMImage *img)
 
 int main(){
     PPMImage *image;
-    image = readPPM("can_bottom.ppm");
-    changeColorPPM(image);
-    writePPM("can_bottom2.ppm",image);
-    printf("Press any key...");
-    getchar();
+    line CutLineOut;
+    if(image = readPPM("Lucernario_dots.ppm"))
+    {
+            //    changeColorPPM(image);
+            //    writePPM("Lucernario2_dots.ppm",image);
+            //    printf("Press any key...");
+            //    getchar();
+            printf("Qui ci arrivo 1\n");
+            CutLineOut = identifyPPMcutLine(image);
+            printf("Qui ci arrivo 2\n");
+            //    printf("Alpha: %lf", CutLineOut.alpha);
+            printf("Intercept (in pixels): %d", CutLineOut.intercept);
+            //    printf("Alpha: %lf\nIntercept: %d \n",CutLineOut.alpha,CutLineOut.intercept);
+    }
 }
