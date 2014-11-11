@@ -154,20 +154,20 @@ line identifyPPMcutLine(PPMImage *img) // Outputs the cut line parameters
                         printf("PorcoDio\n");
                         tempX = (int *) realloc(pixelPositionX,(k+1)*sizeof(int));
                         tempY = (int *) realloc(pixelPositionY,(k+1)*sizeof(int));
-                        //if(!tempX || !tempY)
-                        //{
+                        if(tempX || tempY)
+                        {
                                 pixelPositionX = tempX;
                                 pixelPositionY = tempY;
-                                pixelPositionX[k] = i;
-                                pixelPositionY[k] = j;
+                                pixelPositionX[k] = j;
+                                pixelPositionY[k] = i;
                                 k++;
                                 printf("k = %d\n",k);
-                        //}
-                        /*else
+                        }
+                        else
                         {
                                 printf("Error: Failed realloc of memory");
                                 exit(3);
-                        }*/
+                        }
                 }
         }
     }
