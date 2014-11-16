@@ -2,7 +2,7 @@
 #define _FILL_H
 
 #define CREATOR "INSOMNIALAB"
-#define RGB_COMPONENT_COLOR "255"
+#define RGB_COMPONENT_COLOR 255
 
 typedef struct {
      unsigned char red,green,blue;
