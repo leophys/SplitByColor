@@ -33,6 +33,7 @@ void writePPM(const char *filename, PPMImage *img) {
 
 void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
 {
+    //Init all the needed structs, with two new images
     int i, j;
     PPMImage *newImgLEFT, *newImgRIGHT;
     char *left = "LEFT";
@@ -40,13 +41,13 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
     char filenameLEFT[100];
     char filenameRIGHT[100];
 
-
+    //Prepends the {LEFT,RIGHT} to the filename of the new images
     strncpy(filenameLEFT,filename,100);
     strncpy(filenameRIGHT,filename,100);
     snprintf(filenameLEFT,sizeof(filenameLEFT),"%s%s",left,filename);
     snprintf(filenameRIGHT,sizeof(filenameRIGHT),"%s%s",right,filename);
 
-
+    //malloc of the new images
     newImgLEFT = (PPMImage*) malloc(sizeof(PPMImage));
     newImgLEFT->data = (PPMPixel*) malloc(img->x*img->y*sizeof(PPMPixel));
     newImgLEFT->x = img->x;
@@ -57,6 +58,7 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
     newImgRIGHT->x = img->x;
     newImgRIGHT->y = img->y;    
  
+    //Divides the pixels in LEFT and RIGHT images
     for(j=0;j<img->y;j++)
     {
         for(i=0;i<img->x;i++)
@@ -78,6 +80,7 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
         }
     }
     
+    //Writes the new images and frees the malloc'd structs
     writePPM(filenameLEFT,newImgLEFT);
     writePPM(filenameRIGHT,newImgRIGHT);
     free(newImgLEFT->data);
