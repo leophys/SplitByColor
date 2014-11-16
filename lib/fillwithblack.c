@@ -64,16 +64,16 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
             if(i < j*CutLine->alpha+CutLine->intercept)
             {
                 newImgLEFT->data[j*img->x+i] = img->data[j*img->x+i];
-                newImgRIGHT->data[j*img->x+i].red = (unsigned char)255;
-                newImgRIGHT->data[j*img->x+i].green = (unsigned char)255;
-                newImgRIGHT->data[j*img->x+i].blue = (unsigned char)255;
+                newImgRIGHT->data[j*img->x+i].red = (unsigned char)0;
+                newImgRIGHT->data[j*img->x+i].green = (unsigned char)0;
+                newImgRIGHT->data[j*img->x+i].blue = (unsigned char)0;
             }
             else
             {
                 newImgRIGHT->data[j*img->x+i] = img->data[j*img->x+i];
-                newImgLEFT->data[j*img->x+i].red = (unsigned char)255;
-                newImgLEFT->data[j*img->x+i].green = (unsigned char)255;
-                newImgLEFT->data[j*img->x+i].blue = (unsigned char)255;
+                newImgLEFT->data[j*img->x+i].red = (unsigned char)0;
+                newImgLEFT->data[j*img->x+i].green = (unsigned char)0;
+                newImgLEFT->data[j*img->x+i].blue = (unsigned char)0;
             }
         }
     }
