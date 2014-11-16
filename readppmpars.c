@@ -109,9 +109,7 @@ bool threshold(int green, int red, int blue) // Outputs true if the
     // Test the pixel with the threshold
     if(green >= 0 && green <= 255 && red >= 0 && red <= 255 && blue >= 0 && blue <= 255) {
         
-        if(green>greenT && red<=redT && blue<=blueT) {
-            
-            printf("Vinto\n");
+        if(green>=greenT && red<=redT && blue<=blueT) {
             return 1;
             
         } else {
@@ -135,31 +133,23 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
     int *tempX, *tempY;
     int xCenterUP, yCenterUP, xCenterDOWN, yCenterDOWN;
     int xMiddle, i, j, k, green, red, blue;
+    int kUP, kDOWN;
     pixelPositionX = (int *)calloc(1, sizeof(int));
     pixelPositionY = (int *)calloc(1, sizeof(int));
-    
-    printf("Qui ci arrivo 1.a\n");
-
-    printf("MannagioCristo: %d\n",(int)img->data[385*148].green);
-	printf("G %d\n",(int)img->data[12460].green);
-	printf("R %d\n",(int)img->data[12460].red);
-	printf("B %d\n",(int)img->data[12460].blue);
     k=0;
-    
-    for(i=0;i<img->x;i++){
-		for(j=0;j<img->y;j++) {
+
+	for(j=0;j<img->y;j++){
+		for(i=0;i<img->x;i++) {		
 		
-			if(threshold((int)img->data[i*img->y + j].green, (int)img->data[i*img->y + j].red, (int)img->data[i*img->y + j].blue)) {
-				printf("red: %d\tgreen: %d\tblue: %d\t coord: %d\t%d\t%d\n", img->data[i*img->y + j].red, img->data[i*img->y + j].green, img->data[i*img->y + j].blue, i*img->y + j, i, j);
+			if(threshold((int)img->data[j*img->x + i].green, (int)img->data[j*img->x + i].red, (int)img->data[j*img->x + i].blue)) {
 				tempX = (int *) realloc(pixelPositionX,(k+1)*sizeof(int));
                 tempY = (int *) realloc(pixelPositionY,(k+1)*sizeof(int));
                 if(tempX || tempY) {
 					pixelPositionX = tempX;
                     pixelPositionY = tempY;
-                    pixelPositionX[k] = i;
-                    pixelPositionY[k] = j;
+                    pixelPositionX[k] = j;
+                    pixelPositionY[k] = i;
                     k++;
-                    printf("k = %d\n",k);
 				} else {
                     printf("Error: Failed realloc of memory");
                     exit(3);
@@ -168,40 +158,36 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
 		}		
 	}
 	
-    xMiddle = (int) (img->x)/2.;
+    xMiddle = (int) (img->y)/2.;
     xCenterUP = 0;
     yCenterUP = 0;
     xCenterDOWN = 0;
     yCenterDOWN = 0;
+    kUP = kDOWN = 0;
 
-
-    //printf("Qui ci arrivo 1.b\n");
-    //printf("k: %d",k);
     for(i=0;i<k;i++) {
-		printf("pixelX: %d\tpixelY: %d\n", pixelPositionX[i], pixelPositionY[i]);
-        //printf("Qui ci arrivo: ciclo %d\n",i);
         if(pixelPositionX[i] > xMiddle) {
-			
+			kUP++;
 			xCenterUP+=pixelPositionX[i];
             yCenterUP+=pixelPositionY[i];
             
         } else {
-			
+			kDOWN++;
             xCenterDOWN+=pixelPositionX[i];
             yCenterDOWN+=pixelPositionY[i];
             
         }
     }
-    xCenterUP = (int) xCenterUP/k;
-    yCenterUP = (int) yCenterUP/k;
-    xCenterDOWN = (int) xCenterDOWN/k;
-    yCenterDOWN = (int) yCenterDOWN/k;
+    xCenterUP = (int) xCenterUP/kUP;
+    yCenterUP = (int) yCenterUP/kUP;
+    xCenterDOWN = (int) xCenterDOWN/kDOWN;
+    yCenterDOWN = (int) yCenterDOWN/kDOWN;
 	
 	printf("xmiddle: %d\n", xMiddle);
 	printf("xcenterUP: %d\tycenterUP: %d\n", xCenterUP, yCenterUP);
 	printf("xcenterDOWN: %d\tycenterDOWN: %d\n", xCenterDOWN, yCenterDOWN);
 	
-    CutLine.alpha = (double) atan((double) (yCenterUP - yCenterDOWN)/(xCenterUP - xCenterDOWN));
+    CutLine.alpha = (double) atan((double) (yCenterDOWN - yCenterUP)/(xCenterDOWN - xCenterUP));
     CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
     
     return(CutLine);
@@ -284,9 +270,7 @@ int main(int argc, char *argv[]){
 		//    writePPM("Lucernario2_dots.ppm",image);
 		//    printf("Press any key...");
 		//    getchar();
-		printf("Qui ci arrivo 1\n");
 		CutLineOut = identifyPPMcutLine(image);
-		printf("Qui ci arrivo 2\n");
 		//    printf("Alpha: %lf", CutLineOut.alpha);
 		printf("Intercept (in pixels): %d\n", CutLineOut.intercept);
 		printf("Alpha: %lf\n", CutLineOut.alpha);
