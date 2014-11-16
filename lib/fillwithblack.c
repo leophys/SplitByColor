@@ -35,23 +35,28 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
 {
     int i, j;
     PPMImage *newImgLEFT, *newImgRIGHT;
-    const char *left = "LEFT";
-    const char *right = "RIGHT";
+    char *left = "LEFT";
+    char *right = "RIGHT";
     char filenameLEFT[100];
     char filenameRIGHT[100];
 
 
     strncpy(filenameLEFT,filename,100);
     strncpy(filenameRIGHT,filename,100);
-    strcat(filenameLEFT,left);
-    strcat(filenameRIGHT,right);
+    snprintf(filenameLEFT,sizeof(filenameLEFT),"%s%s",left,filename);
+    snprintf(filenameRIGHT,sizeof(filenameRIGHT),"%s%s",right,filename);
+
 
     newImgLEFT = (PPMImage*) malloc(sizeof(PPMImage));
     newImgLEFT->data = (PPMPixel*) malloc(img->x*img->y*sizeof(PPMPixel));
-    
+    newImgLEFT->x = img->x;
+    newImgLEFT->y = img->y;    
+
     newImgRIGHT = (PPMImage*) malloc(sizeof(PPMImage));
     newImgRIGHT->data = (PPMPixel*) malloc(img->x*img->y*sizeof(PPMPixel));
-    
+    newImgRIGHT->x = img->x;
+    newImgRIGHT->y = img->y;    
+ 
     for(j=0;j<img->y;j++)
     {
         for(i=0;i<img->x;i++)
