@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
-#include "manipppm.h"
+#include "manppm.h"
+#define RGB_COMPONENT_COLOR 255
 
 void print_help(char *name) {
 	printf("Usage: %s -f image.ppm\n", name);
 	exit(EXIT_FAILURE);
 }
 
-static PPMImage *readPPM(const char *filename) {
+PPMImage *readPPM(const char *filename) {
 	char buff[16];
 	PPMImage *img;
 	FILE *fp;
@@ -166,9 +167,9 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
     xCenterDOWN = (int) xCenterDOWN/kDOWN;
     yCenterDOWN = (int) yCenterDOWN/kDOWN;
 	
-	printf("xmiddle: %d\n", xMiddle);
+	/*printf("xmiddle: %d\n", xMiddle);
 	printf("xcenterUP: %d\tycenterUP: %d\n", xCenterUP, yCenterUP);
-	printf("xcenterDOWN: %d\tycenterDOWN: %d\n", xCenterDOWN, yCenterDOWN);
+	printf("xcenterDOWN: %d\tycenterDOWN: %d\n", xCenterDOWN, yCenterDOWN);*/
 	
     CutLine.alpha = (double) atan((double) (yCenterDOWN - yCenterUP)/(xCenterDOWN - xCenterUP));
     CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
