@@ -1,0 +1,140 @@
+Qui ci arrivo 1
+Qui ci arrivo 1.a
+MannagioCristo: 255
+G 255
+R 255
+B 255
+Vinto
+red: 0	green: 255	blue: 0	 coord: 64396	134	76
+k = 1
+Vinto
+red: 0	green: 255	blue: 0	 coord: 64397	134	77
+k = 2
+Vinto
+red: 0	green: 255	blue: 0	 coord: 64398	134	78
+k = 3
+Vinto
+red: 0	green: 255	blue: 0	 coord: 64399	134	79
+k = 4
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65036	135	236
+k = 5
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65037	135	237
+k = 6
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65038	135	238
+k = 7
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65039	135	239
+k = 8
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65676	136	396
+k = 9
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65677	136	397
+k = 10
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65678	136	398
+k = 11
+Vinto
+red: 0	green: 255	blue: 0	 coord: 65679	136	399
+k = 12
+Vinto
+red: 0	green: 255	blue: 0	 coord: 66316	138	76
+k = 13
+Vinto
+red: 0	green: 255	blue: 0	 coord: 66317	138	77
+k = 14
+Vinto
+red: 0	green: 255	blue: 0	 coord: 66318	138	78
+k = 15
+Vinto
+red: 0	green: 255	blue: 0	 coord: 66319	138	79
+k = 16
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254180	529	260
+k = 17
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254181	529	261
+k = 18
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254182	529	262
+k = 19
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254183	529	263
+k = 20
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254820	530	420
+k = 21
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254821	530	421
+k = 22
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254822	530	422
+k = 23
+Vinto
+red: 0	green: 255	blue: 0	 coord: 254823	530	423
+k = 24
+Vinto
+red: 0	green: 255	blue: 0	 coord: 255460	532	100
+k = 25
+Vinto
+red: 0	green: 255	blue: 0	 coord: 255461	532	101
+k = 26
+Vinto
+red: 0	green: 255	blue: 0	 coord: 255462	532	102
+k = 27
+Vinto
+red: 0	green: 255	blue: 0	 coord: 255463	532	103
+k = 28
+Vinto
+red: 0	green: 255	blue: 0	 coord: 256100	533	260
+k = 29
+Vinto
+red: 0	green: 255	blue: 0	 coord: 256101	533	261
+k = 30
+Vinto
+red: 0	green: 255	blue: 0	 coord: 256102	533	262
+k = 31
+Vinto
+red: 0	green: 255	blue: 0	 coord: 256103	533	263
+k = 32
+pixelX: 134	pixelY: 76
+pixelX: 134	pixelY: 77
+pixelX: 134	pixelY: 78
+pixelX: 134	pixelY: 79
+pixelX: 135	pixelY: 236
+pixelX: 135	pixelY: 237
+pixelX: 135	pixelY: 238
+pixelX: 135	pixelY: 239
+pixelX: 136	pixelY: 396
+pixelX: 136	pixelY: 397
+pixelX: 136	pixelY: 398
+pixelX: 136	pixelY: 399
+pixelX: 138	pixelY: 76
+pixelX: 138	pixelY: 77
+pixelX: 138	pixelY: 78
+pixelX: 138	pixelY: 79
+pixelX: 529	pixelY: 260
+pixelX: 529	pixelY: 261
+pixelX: 529	pixelY: 262
+pixelX: 529	pixelY: 263
+pixelX: 530	pixelY: 420
+pixelX: 530	pixelY: 421
+pixelX: 530	pixelY: 422
+pixelX: 530	pixelY: 423
+pixelX: 532	pixelY: 100
+pixelX: 532	pixelY: 101
+pixelX: 532	pixelY: 102
+pixelX: 532	pixelY: 103
+pixelX: 533	pixelY: 260
+pixelX: 533	pixelY: 261
+pixelX: 533	pixelY: 262
+pixelX: 533	pixelY: 263
+xmiddle: 320
+xcenterUP: 67	ycenterUP: 98
+xcenterDOWN: 265	ycenterDOWN: 130
+Qui ci arrivo 2
+Intercept (in pixels): 87
+Alpha: 0.160231

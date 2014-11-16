@@ -1,0 +1,24 @@
+Qui ci arrivo 1
+Qui ci arrivo 1.a
+MannagioCristo: 255
+G 255
+R 255
+B 255
+Vinto
+red: 0	green: 255	blue: 0	 coord: 97040	202	80
+k = 1
+Vinto
+red: 0	green: 255	blue: 0	 coord: 207589	432	229
+k = 2
+Vinto
+red: 0	green: 255	blue: 0	 coord: 207590	432	230
+k = 3
+pixelX: 202	pixelY: 80
+pixelX: 432	pixelY: 229
+pixelX: 432	pixelY: 230
+xmiddle: 320
+xcenterUP: 288	ycenterUP: 153
+xcenterDOWN: 67	ycenterDOWN: 26
+Qui ci arrivo 2
+Intercept (in pixels): 2
+Alpha: 0.521579
