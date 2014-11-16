@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 		printf("Intercept (in pixels): %d\n", CutLineOut.intercept);
 		printf("Alpha: %lf\n", CutLineOut.alpha);
     }
-    
+    fillWithBlack(&CutLineOut,image,filename);
     
     free(image->data);
     return 0;
