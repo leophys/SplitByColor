@@ -97,8 +97,6 @@ bool threshold(int green, int red, int blue) // Outputs true if the
             return 1;
             
         } else {
-            
-            //printf("Perso\n");
             return 0;
             
         }
@@ -110,8 +108,8 @@ bool threshold(int green, int red, int blue) // Outputs true if the
     }
 }
 
-line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
-											// alpha and intercept
+line identifyPPMcutLine(PPMImage *img) {// Outputs the cut line parameters
+										// alpha and intercept
     line CutLine;
     int *pixelPositionX, *pixelPositionY;
     int *tempX, *tempY;
@@ -122,6 +120,7 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
     pixelPositionY = (int *)calloc(1, sizeof(int));
     k=0;
 
+    //Identifies the coordinates of the above-threshold points
 	for(j=0;j<img->y;j++){
 		for(i=0;i<img->x;i++) {		
 		
@@ -142,6 +141,8 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
 		}		
 	}
 	
+    //Geometric needs to distinguish the two points
+    //and find the barycenter of the two separately
     xMiddle = (int) (img->y)/2.;
     xCenterUP = 0;
     yCenterUP = 0;
@@ -149,6 +150,7 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
     yCenterDOWN = 0;
     kUP = kDOWN = 0;
 
+    //Calculates the barycenters of the two points
     for(i=0;i<k;i++) {
         if(pixelPositionX[i] > xMiddle) {
 			kUP++;
@@ -171,6 +173,8 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
 	printf("xcenterUP: %d\tycenterUP: %d\n", xCenterUP, yCenterUP);
 	printf("xcenterDOWN: %d\tycenterDOWN: %d\n", xCenterDOWN, yCenterDOWN);*/
 	
+
+    //Assigns the Intercept and the angle
     CutLine.alpha = (double) atan((double) (yCenterDOWN - yCenterUP)/(xCenterDOWN - xCenterUP));
     CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
     
