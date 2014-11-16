@@ -2,31 +2,15 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
-#include <string.h>
-
-#define CREATOR "RPFELGUEIRAS"
+#include "manppm.h"
 #define RGB_COMPONENT_COLOR 255
-
-typedef struct {
-     unsigned char red,green,blue;
-} PPMPixel;
-
-typedef struct {
-     int x, y;
-     PPMPixel *data;
-} PPMImage;
-
-typedef struct {
-    int intercept;
-    double alpha;
-} line;
 
 void print_help(char *name) {
 	printf("Usage: %s -f image.ppm\n", name);
 	exit(EXIT_FAILURE);
 }
 
-static PPMImage *readPPM(const char *filename) {
+PPMImage *readPPM(const char *filename) {
 	char buff[16];
 	PPMImage *img;
 	FILE *fp;
@@ -183,9 +167,9 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
     xCenterDOWN = (int) xCenterDOWN/kDOWN;
     yCenterDOWN = (int) yCenterDOWN/kDOWN;
 	
-	printf("xmiddle: %d\n", xMiddle);
+	/*printf("xmiddle: %d\n", xMiddle);
 	printf("xcenterUP: %d\tycenterUP: %d\n", xCenterUP, yCenterUP);
-	printf("xcenterDOWN: %d\tycenterDOWN: %d\n", xCenterDOWN, yCenterDOWN);
+	printf("xcenterDOWN: %d\tycenterDOWN: %d\n", xCenterDOWN, yCenterDOWN);*/
 	
     CutLine.alpha = (double) atan((double) (yCenterDOWN - yCenterUP)/(xCenterDOWN - xCenterUP));
     CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
@@ -194,89 +178,4 @@ line identifyPPMcutLine(PPMImage *img) { 	// Outputs the cut line parameters
     
     free(pixelPositionX);
     free(pixelPositionY);
-}
-
-void writePPM(const char *filename, PPMImage *img) {
-    FILE *fp;
-    //open file for output
-    fp = fopen(filename, "wb");
-    if (!fp) {
-         fprintf(stderr, "Unable to open file '%s'\n", filename);
-         exit(1);
-    }
-
-    //write the header file
-    //image format
-    fprintf(fp, "P6\n");
-
-    //comments
-    fprintf(fp, "# Created by %s\n",CREATOR);
-
-    //image size
-    fprintf(fp, "%d %d\n",img->x,img->y);
-
-    // rgb component depth
-    fprintf(fp, "%d\n",RGB_COMPONENT_COLOR);
-
-    // pixel data
-    fwrite(img->data, 3 * img->x, img->y, fp);
-    fclose(fp);
-}
-
-void changeColorPPM(PPMImage *img)
-{
-    int i;
-    if(img){
-
-         for(i=0;i<img->x*img->y;i++){
-              img->data[i].red=RGB_COMPONENT_COLOR-img->data[i].red;
-              img->data[i].green=RGB_COMPONENT_COLOR-img->data[i].green;
-              img->data[i].blue=RGB_COMPONENT_COLOR-img->data[i].blue;
-         }
-    }
-}
-
-int main(int argc, char *argv[]){
-	char filename[100] = {""};
-	int i;
-	int count;
-    PPMImage *image;
-    line CutLineOut;
-    if(argc < 2) {
-		
-		print_help(argv[0]);
-		
-	} else {
-				
-		for(i=1;i<=argc-1;i++) {
-			if(strncmp(argv[i],"-f",2)==0) {
-				count = 1;
-			} else if (count > 0 ) {
-				if(count == 1) {
-					strncpy(filename, argv[i], 100);
-				}
-				
-			} else {
-				print_help(argv[0]);
-			}
-			
-		}
-	}
-    if(strlen(filename) == 0) {
-		print_help(argv[0]);
-	}
-    if(image = readPPM(filename)) {
-		//    changeColorPPM(image);
-		//    writePPM("Lucernario2_dots.ppm",image);
-		//    printf("Press any key...");
-		//    getchar();
-		CutLineOut = identifyPPMcutLine(image);
-		//    printf("Alpha: %lf", CutLineOut.alpha);
-		printf("Intercept (in pixels): %d\n", CutLineOut.intercept);
-		printf("Alpha: %lf\n", CutLineOut.alpha);
-		//    printf("Alpha: %lf\nIntercept: %d \n",CutLineOut.alpha,CutLineOut.intercept);
-    }
-    
-    
-    free(image->data);
 }
