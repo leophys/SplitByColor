@@ -78,5 +78,6 @@ int main(int argc, char *argv[]){
     }
     
     free(image->data);
+    free(opts.filename);
     return 0;
 }
