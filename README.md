@@ -24,7 +24,6 @@ example in stackoverflow (http://stackoverflow.com/questions/2693631/read-ppm-fi
 
 TO DO:
 ------
-- Makefile
 - Integrate with ppmrose (https://aur.archlinux.org/packages/ppmrose) to perform the unwarping
 - Test with real book scanner images
 - A LOT of debug!
