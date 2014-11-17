@@ -5,8 +5,17 @@
 #include "manppm.h"
 #define RGB_COMPONENT_COLOR 255
 
+char *get_help(char *name) {
+    return "Usage: %s [options]\n"
+        "Options:\n"
+        " -p       Will print informations\n"
+        " -s       Will actually split the image\n"
+        " -f FILENAME The file to read from\n"
+        ;
+}
 void print_help(char *name) {
-	printf("Usage: %s -f image.ppm\n", name);
+    fputs(get_help(name), stderr);
+
 	exit(EXIT_FAILURE);
 }
 
