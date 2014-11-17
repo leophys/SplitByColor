@@ -19,43 +19,62 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
+
 #include "lib/manppm.h"
 
+struct options {
+    bool print;
+    bool split;
+    char *filename;
+};
+
 int main(int argc, char *argv[]){
-	char filename[100] = {""};
-	int i;
-	int count;
+    char c;
+    struct options opts;
+    opts.filename = NULL;
+    opts.print = false;
+    opts.split = false;
+    while((c = getopt(argc, argv, "f:ps")) != -1) {
+        switch(c) {
+            case 'f':
+                opts.filename = calloc(strlen(optarg) + 1, sizeof(char));
+                strncpy(opts.filename, optarg, strlen(optarg) + 1);
+                break;
+            case 'p':
+                opts.print = true;
+                break;
+            case 's':
+                opts.split = true;
+                break;
+            case '?':
+                return 2;
+                break;
+            default:
+                return 2;
+                break;
+        }
+    }
     PPMImage *image;
     line CutLineOut;
-    if(argc < 2) {
+    if(!opts.filename || strlen(opts.filename) == 0) {
 		
-		print_help(argv[0]);
-		
-	} else {
-				
-		for(i=1;i<=argc-1;i++) {
-			if(strncmp(argv[i],"-f",2)==0) {
-				count = 1;
-			} else if (count > 0 ) {
-				if(count == 1) {
-					strncpy(filename, argv[i], 100);
-				}
-				
-			} else {
-				print_help(argv[0]);
-			}
-			
-		}
+        return 2;
 	}
-    if(strlen(filename) == 0) {
-		print_help(argv[0]);
-	}
-    if(image = readPPM(filename)) {
+    image = readPPM(opts.filename);
+    if(image == NULL) {
+        fprintf(stderr, "Error reading PPM\n");
+        return 1;
+    } else {
 		CutLineOut = identifyPPMcutLine(image);
+    }
+    if(opts.print) {
 		printf("Intercept (in pixels): %d\n", CutLineOut.intercept);
 		printf("Alpha: %lf\n", CutLineOut.alpha);
     }
-    fillWithBlack(&CutLineOut,image,filename);
+    if(opts.split) {
+        fillWithBlack(&CutLineOut, image, opts.filename);
+    }
     
     free(image->data);
     return 0;
