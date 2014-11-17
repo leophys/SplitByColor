@@ -123,7 +123,7 @@ line identifyPPMcutLine(PPMImage *img) {// Outputs the cut line parameters
     int *pixelPositionX, *pixelPositionY;
     int *tempX, *tempY;
     int xCenterUP, yCenterUP, xCenterDOWN, yCenterDOWN;
-    int xMiddle, i, j, k, green, red, blue;
+    int xMiddle, i, j, k;
     int kUP, kDOWN;
     pixelPositionX = (int *)calloc(1, sizeof(int));
     pixelPositionY = (int *)calloc(1, sizeof(int));

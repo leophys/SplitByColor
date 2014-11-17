@@ -1,19 +1,7 @@
+#include "ppm_common.h"
+
 #ifndef _MANPPM_H
 #define _MANPPM_H
-
-typedef struct {
-     unsigned char red,green,blue;
-} PPMPixel;
-
-typedef struct {
-     int x, y;
-     PPMPixel *data;
-} PPMImage;
-
-typedef struct {
-    int intercept;
-    double alpha;
-} line;
 
 void print_help(char *name);
 
