@@ -8,9 +8,9 @@
 char *get_help(char *name) {
     return "Usage: %s [options]\n"
         "Options:\n"
-        " -p       Will print informations\n"
-        " -s       Will actually split the image\n"
-        " -f FILENAME The file to read from\n"
+        " -p          Will print informations\n"
+        " -s          Will actually split the image\n"
+        " -f FILENAME The PPM file to read from\n"
         ;
 }
 void print_help(char *name) {
