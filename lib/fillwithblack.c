@@ -38,14 +38,18 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
     PPMImage *newImgLEFT, *newImgRIGHT;
     char *left = "LEFT";
     char *right = "RIGHT";
+    char delim[2] = "."; 
+    char *name;
+    char *ext;
     char filenameLEFT[100];
     char filenameRIGHT[100];
 
     //Prepends the {LEFT,RIGHT} to the filename of the new images
-    strncpy(filenameLEFT,filename,100);
-    strncpy(filenameRIGHT,filename,100);
-    snprintf(filenameLEFT,sizeof(filenameLEFT),"%s%s",left,filename);
-    snprintf(filenameRIGHT,sizeof(filenameRIGHT),"%s%s",right,filename);
+    name = strtok((char *) filename, delim);
+    ext = strtok(NULL,delim);
+    
+    snprintf(filenameLEFT, sizeof(filenameLEFT), "%s%s.%s",name,left,ext);
+    snprintf(filenameRIGHT, sizeof(filenameRIGHT), "%s%s.%s",name,right,ext);
 
     //malloc of the new images
     newImgLEFT = (PPMImage*) malloc(sizeof(PPMImage));
