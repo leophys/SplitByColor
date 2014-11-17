@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+
+usage() {
+    echo "Usage: $0 [options] INPUT OUTPUT"
+    echo "options:"
+    echo "  -b    R,G,B,A         Set the BG color as a rgba tuple. Defaults to 0,255,0,1"
+    echo "  -c    CX,CY,RADIUS    Draw a circle at coordinates"
+}
+
+circle_cli() {
+    if [[ $# -ne 3 ]]; then
+        echo "Usage: circle_cli CX CY RADIUS" >&2
+        return 1
+    fi
+    cx=$1
+    cy=$2
+    radius=$3
+    echo "circle $cx,$cy,$((cx + radius)),$cy"
+}
+
+# color is rgba
+color=0,255,0,1
+
+convertcmd=convert
+typeset -a convert_args
+convert_args+=("-strokewidth" "0")
+
+# TODO: option parsing
+while getopts 'b:c:' opt; do
+    case $opt in
+    b)
+        color=$OPTARG
+        ;;
+    c)
+        convert_args+=("-draw" "$(circle_cli $(tr , ' ' <<<$OPTARG))")
+        ;;
+    \?)
+        echo "Unrecognized option: $OPTARG" >&2
+        exit 2
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ $# -ne 2 ]]; then
+    usage >&2
+    exit 2
+fi
+in=$1
+out=$2
+
+$convertcmd "${convert_args[@]}" -fill "rgba($color)" "$in" "$out"
+
+if [[ ! -f "$out" ]]; then
+    echo "Error: can't find output file" >&2
+    exit 1
+fi
+exit 0
