@@ -22,6 +22,7 @@
 #include <unistd.h>
 
 #include "lib/manppm.h"
+#include "lib/fillwithblack.h"
 
 struct options {
     bool print;
