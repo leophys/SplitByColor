@@ -141,6 +141,11 @@ line identifyPPMcutLine(PPMImage *img) {// Outputs the cut line parameters
 		}		
 	}
 	
+	if(k == 0) {
+		printf("No green points are detected!\n");
+		exit(EXIT_FAILURE);
+	}
+	
     //Geometric needs to distinguish the two points
     //and find the barycenter of the two separately
     xMiddle = (int) (img->y)/2.;
