@@ -13,4 +13,4 @@ testImage/kodim%.png:
 	wget --quiet http://r0k.us/graphics/kodak/kodak/$(notdir $@) -O $@
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) split
