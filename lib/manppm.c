@@ -8,7 +8,7 @@
 char *get_help(char *name) {
     return "Usage: %s [options]\n"
         "Options:\n"
-        " -p          Will print informations\n"
+        " -p          Will only print informations\n"
         " -s          Will actually split the image\n"
         " -f FILENAME The PPM file to read from\n"
         ;
@@ -111,7 +111,7 @@ bool threshold(int green, int red, int blue) // Outputs true if the
         }
     } else {
         
-        printf("Error: Ureadable pixel colors");
+        fprintf(stderr, "Error: Ureadable pixel colors");
         exit(2);
         
     }
@@ -190,7 +190,7 @@ line identifyPPMcutLine(PPMImage *img) {// Outputs the cut line parameters
 
     //Assigns the Intercept and the angle
     CutLine.alpha = (double) atan((double) (yCenterDOWN - yCenterUP)/(xCenterDOWN - xCenterUP));
-    CutLine.intercept = (int) (yCenterUP - CutLine.alpha * xCenterUP);
+    CutLine.intercept = (int) (yCenterUP - tan(CutLine.alpha) * xCenterUP);
     
     return(CutLine);
     
