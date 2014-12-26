@@ -41,6 +41,7 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
     char *name;
     char *ext;
     int new_fn_length = strlen(filename) + strlen(right) + 2;
+    int limitL, limitR, rightBorder;
     char *filenameLEFT = calloc(new_fn_length, sizeof(char));
     char *filenameRIGHT = calloc(new_fn_length, sizeof(char));
 
@@ -50,40 +51,68 @@ void fillWithBlack(line *CutLine, PPMImage *img, const char *filename)
 
     snprintf(filenameLEFT, new_fn_length, "%s%s.%s",name,left,ext);
     snprintf(filenameRIGHT, new_fn_length, "%s%s.%s",name,right,ext);
-
+    
+    //Identify the limits of the two different pages
+    if(tan(CutLine->alpha) >= 0)
+    {
+        limitL = (int) (CutLine->intercept + tan(CutLine->alpha)* img->y);
+        limitR = (int) CutLine->intercept;
+    }
+    else
+    {
+        limitL = (int) (CutLine->intercept);
+        limitR = (int) (img->x - (CutLine->intercept - img->y* tan(CutLine->alpha)));
+    }
+    rightBorder = img->x - limitR;
+    
     //malloc of the new images
     newImgLEFT = (PPMImage*) malloc(sizeof(PPMImage));
-    newImgLEFT->data = (PPMPixel*) malloc(img->x*img->y*sizeof(PPMPixel));
-    newImgLEFT->x = img->x;
+    newImgLEFT->data = (PPMPixel*) malloc(limitL*img->y*sizeof(PPMPixel));
     newImgLEFT->y = img->y;    
+    newImgLEFT->x = limitL;
 
     newImgRIGHT = (PPMImage*) malloc(sizeof(PPMImage));
-    newImgRIGHT->data = (PPMPixel*) malloc(img->x*img->y*sizeof(PPMPixel));
-    newImgRIGHT->x = img->x;
+    newImgRIGHT->data = (PPMPixel*) malloc(rightBorder*img->y*sizeof(PPMPixel));
     newImgRIGHT->y = img->y;    
+    newImgRIGHT->x = rightBorder;
 
     //Divides the pixels in LEFT and RIGHT images
     for(j=0;j<img->y;j++)
     {
-        for(i=0;i<img->x;i++)
-        {
-            if(i < j*CutLine->alpha+CutLine->intercept)
+            for(i=0;i<img->x;i++)
             {
-                newImgLEFT->data[j*img->x+i] = img->data[j*img->x+i];
-                newImgRIGHT->data[j*img->x+i].red = (unsigned char)0;
-                newImgRIGHT->data[j*img->x+i].green = (unsigned char)0;
-                newImgRIGHT->data[j*img->x+i].blue = (unsigned char)0;
+
+                    if(i < limitR)
+                    {
+                            newImgLEFT->data[j*limitL+i] = img->data[j*img->x+i];
+                    }
+                    else
+                    {
+                            if(i > limitL)
+                            {
+                                    newImgRIGHT->data[j*(img->x-limitR)+(i-limitR)] = img->data[j*img->x+i];
+                            }
+                            else
+                            {
+                                    if(i < (int) j*tan(CutLine->alpha)+CutLine->intercept)
+                                    {
+                                            newImgLEFT->data[j*limitL+i] = img->data[j*img->x+i];
+                                            newImgRIGHT->data[j*(img->x-limitR)+(i-limitR)].red = (unsigned char)0;
+                                            newImgRIGHT->data[j*(img->x-limitR)+(i-limitR)].green = (unsigned char)0;
+                                            newImgRIGHT->data[j*(img->x-limitR)+(i-limitR)].blue = (unsigned char)0;
+                                    }
+                                    else
+                                    {
+                                            newImgRIGHT->data[j*(img->x-limitR)+(i-limitR)] = img->data[j*img->x+i];
+                                            newImgLEFT->data[j*limitL+i].red = (unsigned char)0;
+                                            newImgLEFT->data[j*limitL+i].green = (unsigned char)0;
+                                            newImgLEFT->data[j*limitL+i].blue = (unsigned char)0;
+                                    }
+                            }
+                    }
             }
-            else
-            {
-                newImgRIGHT->data[j*img->x+i] = img->data[j*img->x+i];
-                newImgLEFT->data[j*img->x+i].red = (unsigned char)0;
-                newImgLEFT->data[j*img->x+i].green = (unsigned char)0;
-                newImgLEFT->data[j*img->x+i].blue = (unsigned char)0;
-            }
-        }
     }
-    
+
     //Writes the new images and frees the malloc'd structs
     writePPM(filenameLEFT,newImgLEFT);
     free(filenameLEFT);
