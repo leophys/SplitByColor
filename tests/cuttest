@@ -12,12 +12,8 @@ function genLine {
 	tanalpha=$sign$(printf "0.%03d%02d" $(( $RANDOM % 1000 )) $(( $RANDOM % 100)))
 }
 
-function initFuncs {
-	gcc -o createBlankImg ../lib/manppm.c ../lib/fillwithblack.c createBlankImage.c -lm 2> /dev/null
-}
-
 function createVoidImage {
-	./createBlankImg -n "voidImage.ppm"
+	./createBlankImage -n "voidImage.ppm"
 }
 
 function cleanVoidImage {
@@ -40,7 +36,7 @@ function testRandomPoints {
 	y2=`shuf -i $halfheight-$height -n 1`
 	x1=`echo "$intercept+$tanalpha*$y1"|bc`
 	x2=`echo "$intercept+$tanalpha*$y2"|bc`
-	./createBlankImg -n "blankImage.ppm" -x $x1 -y $y1 -a $x2 -b $y2
+	./createBlankImage -n "blankImage.ppm" -x $x1 -y $y1 -a $x2 -b $y2
 	../split -f "blankImage.ppm" -p -s
 }
 
@@ -50,9 +46,6 @@ function testRandomPoints {
 #echo $intercept
 #echo $tanalpha
 
-# Init stuff #
-
-initFuncs
 
 # Void Image test #
 
@@ -71,12 +64,9 @@ testRandomPoints
 #echo $y2
 echo "intercept: "$intercept
 echo "tanalpha: "$tanalpha
-rm blankImage.ppm
+rm -f blankImage.ppm
 
 # Clean All #
-
-rm ../lib/fillwithblack.o ../lib/manppm.o
-rm ./createBlankImg
 
 ###################
 

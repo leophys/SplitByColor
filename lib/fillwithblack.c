@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "fillwithblack.h"
 
 void writePPM(const char *filename, PPMImage *img) {
