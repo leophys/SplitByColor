@@ -4,7 +4,8 @@ all: split
 images:$(addprefix testImage/,$(images_names))
 
 OBJ:=split.o lib/fillwithblack.o lib/manppm.o
-CFLAGS=-Wall
+EXTRACFLAGS=
+CFLAGS=-Wall $(EXTRACFLAGS)
 
 split: $(OBJ)
 	$(CC) $(CFLAGS) -lm $(OBJ) -o $@
