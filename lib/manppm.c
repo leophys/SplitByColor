@@ -97,12 +97,12 @@ PPMImage *readPPM(const char *filename) {
 
 bool threshold(int green, int red, int blue) // Outputs true if the
 {                                            // pixel is above the threshold
-    static int greenT=180, redT=0, blueT=0;
+//    static int greenT=100, redT=100, blueT=100; // defined in ppm_common.h
 
     // Test the pixel with the threshold
     if(green >= 0 && green <= 255 && red >= 0 && red <= 255 && blue >= 0 && blue <= 255) {
         
-        if(green>=greenT && red<=redT && blue<=blueT) {
+        if(green<=greenT && red>=redT && blue<=blueT) {
             return 1;
             
         } else {
