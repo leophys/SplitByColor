@@ -151,7 +151,7 @@ line identifyPPMcutLine(PPMImage *img) {// Outputs the cut line parameters
 	}
 	
 	if(k == 0) {
-		printf("No green points are detected!\n");
+		printf("No red points are detected!\n");
 		exit(EXIT_FAILURE);
 	}
 	
