@@ -1,0 +1,2 @@
+This component is dedicated to find cirlces using Python + opencv
+
