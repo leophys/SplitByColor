@@ -25,10 +25,16 @@ def highlight(img, circles, args):
 def main(args):
     img = cv2.imread(args.image)
     cimg = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    if False:
-        cv2.imshow('hsv', cv2.cvtColor(cimg, cv2.COLOR_HSV2BGR))
+    if args.debug_steps:
+        cv2.imshow('original (hsv)', cv2.cvtColor(cimg, cv2.COLOR_HSV2BGR))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+    if args.blur is not None:
+        cimg = cv2.GaussianBlur(cimg, (args.blur, args.blur), 0)
+        if args.debug_steps:
+            cv2.imshow('after blurring',  cv2.cvtColor(cimg, cv2.COLOR_HSV2BGR))
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
     lower = np.array([args.hue - args.hue_radius, args.min_saturation, args.min_value])
     upper = np.array([args.hue + args.hue_radius,255,args.max_value])
@@ -38,12 +44,18 @@ def main(args):
     # the mask
     mask = cv2.inRange(cimg, lower, upper)
     cimg = cv2.bitwise_and(cimg, cimg, mask = mask)
-    if True:
-        cv2.imshow('threshold', cv2.cvtColor(cimg, cv2.COLOR_HSV2BGR))
+    if args.debug_steps:
+        cv2.imshow('after HSV threshold', cv2.cvtColor(cimg, cv2.COLOR_HSV2BGR))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+
+
     gray = cv2.cvtColor(cv2.cvtColor(cimg, cv2.COLOR_HSV2BGR),
                         cv2.COLOR_BGR2GRAY)
+    if args.debug_steps:
+        cv2.imshow('to gray', gray)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     cv2.destroyAllWindows()
     circles = get_circles(gray, args)
     if args.coordinates:
@@ -63,7 +75,13 @@ def get_parser():
     p = argparse.ArgumentParser()
     p.add_argument('image')
 
-    col = p.add_argument_group('color', description="HSV is expressed on the 0-255 range")
+    proc = p.add_argument_group('preprocessing')
+    proc.add_argument('--blur', metavar='RADIUS', type=int,
+                      help='It must be an odd number. If omitted, no blurring '
+                      'will occur')
+
+    col = p.add_argument_group('color filtering',
+                               description="HSV is expressed on the 0-255 range")
     col.add_argument('--hue', metavar='PX', default=60, type=int, help="Default: 60 (green)")
     col.add_argument('--hue-radius', metavar='PX', default=10, type=int, help="Default: 10")
     col.add_argument('--min-saturation', metavar='S', default=150, type=int, help="Default: 150")
@@ -77,7 +95,10 @@ def get_parser():
     det.add_argument('--max-radius', metavar='PX', default=0, type=int)
 
     p.add_argument('--coordinates', metavar='FILE', help='Write found coordinates to FILE')
-    p.add_argument('--show-result', action='store_true', default=False, help='Show image with found circles')
+    p.add_argument('--show-result', action='store_true', default=False,
+                   help='Show image with found circles')
+    p.add_argument('--debug-steps', action='store_true', default=False,
+                   help='Display image at each step')
 
     return p
 
