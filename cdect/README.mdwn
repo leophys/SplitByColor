@@ -1,0 +1,49 @@
+This component is dedicated to finding cirlces using Python + OpenCV.
+Just ensure that you have opencv installed (pacman -S opencv, if you use
+archlinux) and run:
+
+    python2 cdect.py
+
+Color tuning
+==============
+
+Color is expressed in HSV. The scale is [255,255,255]. This means that a
+typical green is 60, blue is 120.
+Ideally, the hue is the only parameter you need to tune. But depending on
+shooting conditions, you may also need to tune saturation and value.
+
+
+Circle detection
+===================
+
+Most "circle detection" options are pretty intuitive. Some are definitely not,
+especially param2
+
+
+Radius size
+------------
+
+
+you can specify a range of accepted radii (in px) for the circles.
+If you know the resolution of the image, the size of the photographed object in
+cm, and the size of the circles in cm, you can easily calculate the exact
+radius as
+
+    (pixelwidth / objectwidth) * circlewidth
+
+use min-radius and max-radius as some neighbourhood of this point, and it should work.
+
+
+Circle distance
+-----------------
+
+You can specify a minimum distance between circles. This will avoid that
+circles too near will all be detected. Similarly to the radius size, you can
+tune this if you know the distance between the real circles.
+
+
+param2
+--------
+
+This is HoughCircles param2. Just remember that the higest, the more selective.
+The lower, the more false positives.
